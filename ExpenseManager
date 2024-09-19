@@ -1,0 +1,91 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+public class ExpenseManagerGUI extends JFrame {
+    private JTextField dateField, amountField, descriptionField;
+    private JTextArea expenseListArea;
+    private JLabel totalLabel;
+    private DatabaseManager dbManager;
+
+    public ExpenseManagerGUI() {
+        dbManager = new DatabaseManager();
+
+        // Ievadlauki
+        dateField = new JTextField(10);
+        amountField = new JTextField(10);
+        descriptionField = new JTextField(15);
+
+        // Pievienot pogu
+        JButton addButton = new JButton("Add Expense");
+        addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                addExpense();
+            }
+        });
+
+        // Izdevumu saraksts un pārskats
+        expenseListArea = new JTextArea(10, 30);
+        expenseListArea.setEditable(false);
+        totalLabel = new JLabel("Total: 0.00");
+
+        // Paneļi
+        JPanel inputPanel = new JPanel();
+        inputPanel.add(new JLabel("Date (YYYY-MM-DD):"));
+        inputPanel.add(dateField);
+        inputPanel.add(new JLabel("Amount:"));
+        inputPanel.add(amountField);
+        inputPanel.add(new JLabel("Description:"));
+        inputPanel.add(descriptionField);
+        inputPanel.add(addButton);
+
+        JPanel summaryPanel = new JPanel();
+        summaryPanel.add(totalLabel);
+
+        // Galvenā loga uzstādījumi
+        setLayout(new BorderLayout());
+        add(inputPanel, BorderLayout.NORTH);
+        add(new JScrollPane(expenseListArea), BorderLayout.CENTER);
+        add(summaryPanel, BorderLayout.SOUTH);
+
+        setTitle("Expense Manager");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setVisible(true);
+
+        // Ielādēt sākotnējos izdevumus
+        loadExpenses();
+    }
+
+    private void addExpense() {
+        String date = dateField.getText();
+        double amount = Double.parseDouble(amountField.getText());
+        String description = descriptionField.getText();
+
+        Expense expense = new Expense(date, amount, description);
+        dbManager.addExpense(expense);
+        loadExpenses();
+    }
+
+    private void loadExpenses() {
+        List<Expense> expenses = dbManager.getExpenses();
+        expenseListArea.setText("");
+
+        for (Expense exp : expenses) {
+            expenseListArea.append(exp.getDate() + " | " + exp.getAmount() + " | " + exp.getDescription() + "\n");
+        }
+
+        double total = dbManager.getTotalExpenses();
+        totalLabel.setText("Total: " + total);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new ExpenseManagerGUI();
+            }
+        });
+    }
+}
