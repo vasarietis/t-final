@@ -1,0 +1,14 @@
+mysql> use expense_tracker;
+Database changed
+mysql> describe expenses;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| id          | int           | NO   | PRI | NULL    | auto_increment |
+| descriprion | varchar(255)  | YES  |     | NULL    |
+     |
+| amount      | decimal(10,2) | YES  |     | NULL    |
+     |
+| date        | date          | YES  |     | NULL    |
+     |
++-------------+---------------+------+-----+---------+----------------+
