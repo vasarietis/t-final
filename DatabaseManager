@@ -1,0 +1,58 @@
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DatabaseManager {
+    private static final String URL = "jdbc:mysql://localhost:3306/expense_manager";
+    private static final String USER = "root";
+    private static final String PASSWORD = "Entershikari13";
+
+    // metode
+    private Connection connect() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASSWORD);
+    }
+    // izdevuma pievienošana
+    public void addExpense(Expense expense) {
+        String sql = "INSERT INTO expenses (date, amount, description) VALUES (?, ?, ?)";
+    // savienojuma izveide
+        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, expense.getDate());
+            pstmt.setDouble(2, expense.getAmount());
+            pstmt.setString(3, expense.getDescription());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    // iegūt datus
+    public List<Expense> getExpenses() {
+        List<Expense> expenses = new ArrayList<>();
+        String sql = "SELECT * FROM expenses ORDER BY date";
+
+        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Expense expense = new Expense(rs.getString("date"), rs.getDouble("amount"), rs.getString("description"));
+                expenses.add(expense);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return expenses;
+    }
+    // aprēķina summu
+    public double getTotalExpenses() {
+        String sql = "SELECT SUM(amount) as total FROM expenses";
+        double total = 0;
+
+        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                total = rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return total;  // atgriež summu
+    }
+}
