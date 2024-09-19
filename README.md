@@ -7,3 +7,4 @@ Galvenās funkcijas:
 Pievienot jaunu izdevumu (datums, summa, apraksts).
 Apskatīt visus reģistrētos izdevumus, sakārtotus pēc datuma.
 Saņemt kopsavilkumu par kopējiem izdevumiem.
+![expense manager](https://github.com/user-attachments/assets/da609af5-1c1e-4607-a3a6-02012541318a)
