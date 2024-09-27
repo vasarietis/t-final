@@ -1,6 +1,4 @@
 # t-final
-gala uzdevums
-Projekta apraksts
 Expense Manager ir vienkārša izdevumu reģistrēšanas sistēma, kas izstrādāta ar Java un MySQL. Sistēma ļauj lietotājiem reģistrēt ikdienas izdevumus, apskatīt reģistrētos izdevumus, kā arī iegūt kopējo izdevumu summu. Grafiskā lietotāja saskarne (GUI) ir izveidota, izmantojot Java Swing.
 
 Galvenās funkcijas:
